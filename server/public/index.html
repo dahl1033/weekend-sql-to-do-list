@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="vendors/jquery.js"></script>
+    <script src="scripts/client.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <h1>Todo List</h1>
+        <input type="text" placeholder="Contributor" id="contributor">
+        <input type="number" placeholder="Schedule" id="schedule">
+        <input type="text" placeholder="Task" id="task">
+        <input type="date" placeholder="Date Assigned" id="dateAssigned">
+        <input type="date" placeholder="Completion Date" id="dateDue">
+        <input type="text" placeholder="Notes" id="notes">
+
+        <h1>Things To-do</h1>
+        <table id="tableWrapper">
+        <thead>
+            <tr>
+                <th>Contributor</th>
+                <th>Schedule</th>
+                <th>Task</th>
+                <th>Date Assigned</th>
+                <th>Completion Date</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody id="todoTableBody"></tbody>
+    </table>
+    </div>
+    
+</body>
+</html>
