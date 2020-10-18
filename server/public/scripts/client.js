@@ -5,6 +5,7 @@ $(document).ready(onReady);
 function onReady(){
     getTodo();
     console.log('jquery active');
+    $('#submitBtn').on('click', submitTodoObject)
 }
 
 
@@ -65,6 +66,21 @@ function submitTodoObject(){
     }).then(function(response){
         console.log(response);
         getTodo();
+    }).catch(function(error){
+        console.log(error);
+    });
+}
+
+function deleteTodo(){
+    let todoId = $(this).closest('td').data('id');
+    console.log(todoId);
+
+    $.ajax({
+        method: 'DELETE',
+        url:`/todo/${todoId}`
+    }).then(function(response){
+        console.log(response);
+        getFoods();
     }).catch(function(error){
         console.log(error);
     });
