@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 
 router.post('/', (req, res) => {
-    console.log('in post, req.body',req.body);
+    console.log('in post, req.body',req.body);  
     let contributor = req.body.contributor;
     let schedule = req.body.schedule;
     let task = req.body.task;
@@ -42,7 +42,7 @@ router.delete('/:id', (req, res) => {
         console.log(result);
         res.sendStatus(200);
     }).catch((error) => {
-        console.log('error in post', error);
+        console.log('error in delete router', error);
         res.sendStatus(500);
     });
 }); // end DELETE router
