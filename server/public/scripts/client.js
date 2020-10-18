@@ -5,12 +5,13 @@ $(document).ready(onReady);
 function onReady(){
     getTodo();
     console.log('jquery active');
+    // event listeners
     $('#submitBtn').on('click', submitTodoObject);
     $('#noteContainer').on('click', '.deleteBtn', deleteTodo);
     $('#noteContainer').on('click', '.stickyNote', isDoneCheck);
     $('#noteContainer').on('click', '.stickyNote', changeColor);
 }
-
+ // AJAX call to retreive information from server
 function getTodo(){
     $.ajax({
         method: 'GET',
@@ -21,7 +22,7 @@ function getTodo(){
         console.log(error);
     });
 }
-
+// add database info to DOM
 function appendToDom(array){
     $('#noteContainer').empty();
     console.log('array', array);
@@ -30,11 +31,13 @@ function appendToDom(array){
         let contributor = array[i].contributor_name;
         let schedule = array[i].schedule;
         let task = array[i].task;
-        let dateAssigned = array[i].date_assigned;
-        let dateDue = array[i].finish_date;
+        // was going to sort the sticky notes by tasks that need to be completed first
+        // let dateAssigned = array[i].date_assigned;
+        // let dateDue = array[i].finish_date;
         let notes = array[i].notes;
         
         console.log('this is the id in client', id);
+        // adds a new sticky note to the noteContainer with tasks that need to be completed
         $('#noteContainer').append(`
             <div class="stickyNote" data-schedule="${schedule}" data-done="${array[i].done}" data-id="${id}">
             <ul>
@@ -51,8 +54,9 @@ function appendToDom(array){
     }
 }
 
-
+// POST function that takes in user input and sends it to the server
 function submitTodoObject(){
+    // local variable delcoration 
     let contributor = $('#contributor').val();
     let schedule = $('#schedule').val();
     let task = $('#task').val();
@@ -62,6 +66,7 @@ function submitTodoObject(){
     $.ajax({
         method: 'POST',
         url:`/todo`,
+        // send an object with given attributes to the server to be used
         data: {contributor: contributor,
                 schedule: schedule,
                 task: task,
@@ -77,6 +82,7 @@ function submitTodoObject(){
     });
 }
 
+// finds the closest parent object of one selected and removes it from database
 function deleteTodo(){
     let todoId = $(this).closest('div').data('id');
     console.log('todo is here' , todoId);
@@ -92,6 +98,7 @@ function deleteTodo(){
     });
 }
 
+// checs to see whether a task is completed, boolean value
 function isDoneCheck() {
     let todoId = $(this).closest('div').data('id');
     let isDone = $(this).closest('div').data('done');
@@ -107,6 +114,7 @@ function isDoneCheck() {
     }); // end isDoneCheck
 }
 
+// changes background color of given
 function changeColor() {
     console.log('in change color', $(this));
     if ($(this).children().hasClass("active") === true) {
