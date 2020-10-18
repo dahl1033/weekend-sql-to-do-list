@@ -45,27 +45,27 @@ function appendToDom(array){
 }
 
 
-// function submitTodoObject(){
-//     let contributor = $('#contributor').val();
-//     let schedule = $('#schedule').val();
-//     let task = $('#task').val();
-//     let dateAssigned = $('#dateAssigned').val();
-//     let dateDue = $('#dateDue').val();
-//     let notes = $('#notes').val();
-//     $.ajax({
-//         method: 'POST',
-//         url:`/todo`,
-//         data: {contributor: contributor,
-//                 schedule: schedule,
-//                 task: task,
-//                 dateAssigned: dateAssigned,
-//                 dateDue: dateDue,
-//                 notes: notes
-//             }
-//     }).then(function(response){
-//         console.log(response);
-//         getFoods();
-//     }).catch(function(error){
-//         console.log(error);
-//     });
-// }
+function submitTodoObject(){
+    let contributor = $('#contributor').val();
+    let schedule = $('#schedule').val();
+    let task = $('#task').val();
+    let dateAssigned = $('#dateAssigned').val();
+    let dateDue = $('#dateDue').val();
+    let notes = $('#notes').val();
+    $.ajax({
+        method: 'POST',
+        url:`/todo`,
+        data: {contributor: contributor,
+                schedule: schedule,
+                task: task,
+                dateAssigned: dateAssigned,
+                dateDue: dateDue,
+                notes: notes
+            }
+    }).then(function(response){
+        console.log(response);
+        getTodo();
+    }).catch(function(error){
+        console.log(error);
+    });
+}
