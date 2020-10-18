@@ -1,0 +1,66 @@
+#container {
+    background-color: blueviolet;
+}
+#noteContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.stickyNote {
+    display: flex;
+    margin: 0em 0em 0em 0em;
+}
+
+.contributor {
+    font-size: large;
+}
+
+.taskInfo {
+    font-size: medium;
+}
+
+.taskNotes {
+    font-size: small;
+}
+
+.dateAssigned {
+    float: left;
+    font-size: x-small;
+}
+
+.dateCompleted {
+   float: right;
+   font-size: x-small;
+}
+
+h2,p {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+ul,li {
+    list-style: none;
+}
+
+ul {
+    overflow: hidden;
+    padding: 10px 10px 10px 10px;
+}
+
+ul li a {
+    color: #000;
+    background: #ffc;
+    display: block;
+    height: 10em;
+    width: 10em;
+    padding: 2em;
+}
+
+ul li {
+    margin: 1em;
+    float: left;
+}
+
+.active {
+    background: rgb(255, 0, 0) !important;
+}

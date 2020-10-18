@@ -6,10 +6,10 @@ function onReady(){
     getTodo();
     console.log('jquery active');
     $('#submitBtn').on('click', submitTodoObject);
-    $('#todoTableBody').on('click', '.deleteBtn', deleteTodo);
-    $('#todoTableBody').on('click', '.isDoneBtn', isDoneCheck);
+    $('#noteContainer').on('click', '.deleteBtn', deleteTodo);
+    $('#noteContainer').on('click', '.stickyNote', isDoneCheck);
+    $('#noteContainer').on('click', '.stickyNote', changeColor);
 }
-
 
 function getTodo(){
     $.ajax({
@@ -23,7 +23,7 @@ function getTodo(){
 }
 
 function appendToDom(array){
-    $('#todoTableBody').empty();
+    $('#noteContainer').empty();
     console.log('array', array);
     for(let i=0; i < array.length; i++){
         let id = array[i].id;
@@ -34,19 +34,19 @@ function appendToDom(array){
         let dateDue = array[i].finish_date;
         let notes = array[i].notes;
         
-console.log('this is the id in client', id);
-        $('#todoTableBody').append(`
-            <tr data-done='${array[i].done}' data-id='${id}'>
-                <td>${id}</td>
-                <td>${contributor}</td>
-                <td>${schedule}</td>
-                <td>${task}</td>
-                <td>${dateAssigned}</td>
-                <td>${dateDue}</td>
-                <td>${notes}</td>
-                <td><button class="deleteBtn">Delete</button></td>
-                <td><button class="isDoneBtn">Complete</button></td>
-            </tr>
+        console.log('this is the id in client', id);
+        $('#noteContainer').append(`
+            <div class="stickyNote" data-schedule="${schedule}" data-done="${array[i].done}" data-id="${id}">
+            <ul>
+                <li>
+                    <a href="#">
+                        <h2 class="contributor"> ${contributor}</h2>
+                        <p class="taskInfo">Task: ${task}</p>
+                        <p class="taskNotes">Notes: ${notes}</p>
+                        <td><button class="deleteBtn">Delete</button></td>
+                </li>
+            </ul>
+        </div>
         `);
     }
 }
@@ -78,7 +78,7 @@ function submitTodoObject(){
 }
 
 function deleteTodo(){
-    let todoId = $(this).closest('tr').data('id');
+    let todoId = $(this).closest('div').data('id');
     console.log('todo is here' , todoId);
 
     $.ajax({
@@ -93,8 +93,8 @@ function deleteTodo(){
 }
 
 function isDoneCheck() {
-    let todoId = $(this).closest('tr').data('id');
-    let isDone = $(this).closest('tr').data('done');
+    let todoId = $(this).closest('div').data('id');
+    let isDone = $(this).closest('div').data('done');
     $.ajax({
         method: 'PUT',
         url: `/todo/done/${todoId}`,
@@ -105,4 +105,14 @@ function isDoneCheck() {
     }).catch( (error) => {
         console.log('error from PUT request', error);
     }); // end isDoneCheck
+}
+
+function changeColor() {
+    console.log('in change color', $(this));
+    if ($(this).children().hasClass("active") === true) {
+            $(this).children().removeClass("active");
+    }
+    else {
+        $(this).children().addClass("active");
+    }
 }
