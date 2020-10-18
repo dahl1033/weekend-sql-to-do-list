@@ -7,6 +7,7 @@ function onReady(){
     console.log('jquery active');
     $('#submitBtn').on('click', submitTodoObject);
     $('#todoTableBody').on('click', '.deleteBtn', deleteTodo);
+    $('#todoTableBody').on('click', '.isDoneBtn', isDoneCheck);
 }
 
 
@@ -44,6 +45,7 @@ console.log('this is the id in client', id);
                 <td>${dateDue}</td>
                 <td>${notes}</td>
                 <td><button class="deleteBtn">Delete</button></td>
+                <td><button class="isDoneBtn">Complete</button></td>
             </tr>
         `);
     }
@@ -88,4 +90,19 @@ function deleteTodo(){
     }).catch(function(error){
         console.log(error);
     });
+}
+
+function isDoneCheck() {
+    let todoId = $(this).closest('tr').data('id');
+    let isDone = $(this).closest('tr').data('done');
+    $.ajax({
+        method: 'PUT',
+        url: `/todo/done/${todoId}`,
+        data: {done: isDone}
+    }).then( (response) => {
+        console.log('response from PUT request', response);
+        getTodo();
+    }).catch( (error) => {
+        console.log('error from PUT request', error);
+    }); // end isDoneCheck
 }

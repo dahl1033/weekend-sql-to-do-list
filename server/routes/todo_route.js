@@ -47,4 +47,25 @@ router.delete('/:id', (req, res) => {
     });
 }); // end DELETE router
 
+router.put('/done/:id', (req, res)=>{
+    console.log(`isDone PUT router active`);
+    let queryText = '';
+    let id = req.params.id;
+    let isDone = req.body.done;
+    console.log(`BEFORE id: ${id} isDone: ${isDone}`);
+    
+    if (isDone === 'false') {
+        queryText = `UPDATE "todo" SET "done" = 'true' WHERE "id" = $1;`
+    } else if (isDone === 'true') {
+        queryText = `UPDATE "todo" SET "done" = 'false' WHERE "id" = $1;`
+    }
+    pool.query(queryText, [id]).then((result)=>{
+        console.log('result from PUT', result.command);
+        res.sendStatus(200);
+    }).catch((error)=>{
+        console.log('error from PUT', error);
+        res.sendStatus(500)
+    });
+}); // end PUT router
+
 module.exports = router;
