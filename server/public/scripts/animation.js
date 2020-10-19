@@ -1,1 +1,0 @@
-console.log('animation is in full force');
