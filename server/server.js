@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+var port = process.env.PORT || 5000;
+
 const app = express();
+
 
 const port = 5000;
 
