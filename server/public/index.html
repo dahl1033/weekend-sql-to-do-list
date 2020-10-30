@@ -1,44 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="vendors/jquery.js"></script>
-    <script src="scripts/client.js"></script>
-    <script src="scripts/animation.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
-    <title>Document</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="./vendors/jquery.js"></script>
+    <script src="./scripts/client.js"></script>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
-<body>
-    <div id="container">
-        <h1>Todo List</h1>
-        <input type="text" placeholder="Contributor" id="contributor">
-        <input type="number" placeholder="Schedule" id="schedule">
-        <input type="text" placeholder="Task" id="task">
-        <input type="date" placeholder="Date Assigned" id="dateAssigned">
-        <input type="date" placeholder="Completion Date" id="dateDue">
-        <input type="text" placeholder="Notes" id="notes">
-        <button id="submitBtn">Submit</button>
+<body class="bg-light">
+    <div class="jumbotron bg-secondary">
+        <div class="container">
+            <h1>To-Do List</h1>
+            <p>Enter a task to add it to the list</p>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Add To-Do Item:</h2>
+        <div class="input-group mb-3">
+            <input id="newTodo" type="text" class="form-control" placeholder="Add a Task Here">
+            <div class="input-group-append">
+                <button id="submit" class="btn btn-success">Add Task</button>
+            </div>
+        </div>
 
-        <h1>Things To-do</h1>
-        <table id="tableWrapper">
-        <thead>
-            <tr>
-                <th>Contributor</th>
-                <th>Schedule</th>
-                <th>Task</th>
-                <th>Date Assigned</th>
-                <th>Completion Date</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody id="todoTableBody"></tbody>
-    </table>
+        <br/>
+            
+        <h1>Tasks:</h1>
+        <ul id=displayTasks class="shadow-lg p-3 mb-5 bg-white rounded">
+                
+        <!-- todo list goes here -->
 
-<div id="noteContainer">
+        </ul>
+    </div>
 
-</div>
 
-    </div> 
 </body>
 </html>

@@ -1,7 +1,7 @@
 {
   "name": "weekend-sql-to-do-list",
   "version": "2.0.0",
-  "description": "Weekend Code Challenge 3",
+  "description": "Weekend Code Challenge",
   "main": "server.js",
   "scripts": {
     "start": "node server/server.js"

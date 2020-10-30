@@ -1,126 +1,114 @@
-console.log('js active');
+console.log('Hello from js');
 
 $(document).ready(onReady);
 
-function onReady(){
-    getTodo();
-    console.log('jquery active');
-    // event listeners
-    $('#submitBtn').on('click', submitTodoObject);
-    $('#noteContainer').on('click', '.deleteBtn', deleteTodo);
-    $('#noteContainer').on('click', '.stickyNote', isDoneCheck);
-    $('#noteContainer').on('click', '.stickyNote', changeColor);
+function onReady() {
+    getTodos();
+    $('#submit').on('click', addTodo); 
+    $('#displayTasks').on('click', '.delete', deleteBtn);
+    $('#displayTasks').on('click', '.complete', completeBtn)
 }
- // AJAX call to retreive information from server
-function getTodo(){
+
+function getTodos(){
     $.ajax({
         method: 'GET',
-        url: '/todo'
-    }).then(function (response){
+        url: '/todo'                // ajax GET to get data from database from todo route
+    }).then(function(response) {
         appendToDom(response);
     }).catch(function(error){
-        console.log(error);
+        console.log(error);    
     });
 }
-// add database info to DOM
+
 function appendToDom(array){
-    $('#noteContainer').empty();
-    console.log('array', array);
-    for(let i=0; i < array.length; i++){
-        let id = array[i].id;
-        let contributor = array[i].contributor_name;
-        let schedule = array[i].schedule;
-        let task = array[i].task;
-        // was going to sort the sticky notes by tasks that need to be completed first
-        // let dateAssigned = array[i].date_assigned;
-        // let dateDue = array[i].finish_date;
-        let notes = array[i].notes;
-        
-        console.log('this is the id in client', id);
-        // adds a new sticky note to the noteContainer with tasks that need to be completed
-        $('#noteContainer').append(`
-            <div class="stickyNote" data-schedule="${schedule}" data-done="${array[i].done}" data-id="${id}">
-            <ul>
-                <li>
-                    <a href="#">
-                        <h2 class="contributor"> ${contributor}</h2>
-                        <p class="taskInfo">Task: ${task}</p>
-                        <p class="taskNotes">Notes: ${notes}</p>
-                        <td><button class="deleteBtn">Delete</button></td>
+    $('#displayTasks').empty();
+    for (let i = 0; i < array.length; i++) {
+        if(array[i].completed_status === true){
+        $('#displayTasks').append(`
+            <li class="taskItem completedItem shadow p-3 mb-5 bg-secondary rounded" data-id=${array[i].id} data-status= ${array[i].completed_status}>
+                <p class="task"><del>${array[i].task}</del></p>
+                <button class="complete btn btn-success">Undo Completed Task</button>
+                <button class="delete btn btn-danger">Remove</button>
+            </li>
+        `)}
+        else{
+            $('#displayTasks').append(`
+                <li class="taskItem shadow p-3 mb-5 bg-white rounded" data-id=${array[i].id} data-status= ${array[i].completed_status}>
+                    <p class="task">${array[i].task}</p>
+                    <button class="complete btn btn-success">Complete Task</button>
+                    <button class="delete btn btn-danger">Remove</button>
                 </li>
-            </ul>
-        </div>
-        `);
+            
+        `)}
     }
 }
 
-// POST function that takes in user input and sends it to the server
-function submitTodoObject(){
-    // local variable delcoration 
-    let contributor = $('#contributor').val();
-    let schedule = $('#schedule').val();
-    let task = $('#task').val();
-    let dateAssigned = $('#dateAssigned').val();
-    let dateDue = $('#dateDue').val();
-    let notes = $('#notes').val();
-    $.ajax({
-        method: 'POST',
-        url:`/todo`,
-        // send an object with given attributes to the server to be used
-        data: {contributor: contributor,
-                schedule: schedule,
-                task: task,
-                dateAssigned: dateAssigned,
-                dateDue: dateDue,
-                notes: notes
-            }
-    }).then(function(response){
-        console.log(response);
-        getTodo();
-    }).catch(function(error){
-        console.log(error);
-    });
+function addTodo(){
+    if($('#newTodo').val() === ''){
+        return alert('ERROR: Input a task in the field')
+    } else {
+    
+        let newTodo = {
+            task: $('#newTodo').val()   // grabs newTodo value from user input
+        }
+        $.ajax({
+            method: 'POST',
+            url: '/todo',               // ajax POST to send new todo input to todo_route
+            data: newTodo
+        }).then(function (response) {
+            $('#newTodo').val('');
+            console.log('Response:', response);
+            getTodos();
+        });
+
+    }
 }
 
-// finds the closest parent object of one selected and removes it from database
-function deleteTodo(){
-    let todoId = $(this).closest('div').data('id');
-    console.log('todo is here' , todoId);
-
+function deleteBtn(){
     $.ajax({
         method: 'DELETE',
-        url:`/todo/${todoId}`
-    }).then(function(response){
-        console.log(response);
-        getTodo();
+        url: `/todo/${$(this).closest('li').data('id')}` // grabs the li data-id 
+    }).then(function(response) {
+        console.log('Delete Btn response:', response);
+        getTodos();
     }).catch(function(error){
-        console.log(error);
+        console.log('ERROR in deleteBtn:', error);
     });
 }
 
-// checs to see whether a task is completed, boolean value
-function isDoneCheck() {
-    let todoId = $(this).closest('div').data('id');
-    let isDone = $(this).closest('div').data('done');
+function completeBtn(){
     $.ajax({
         method: 'PUT',
-        url: `/todo/done/${todoId}`,
-        data: {done: isDone}
-    }).then( (response) => {
-        console.log('response from PUT request', response);
-        getTodo();
-    }).catch( (error) => {
-        console.log('error from PUT request', error);
-    }); // end isDoneCheck
+        url: `/todo/completed/${$(this).closest('li').data('id')}`,     // grabs the li data-id 
+        data: {completedStatus: !$(this).closest('li').data('status')}  // grabs the li data-status 
+    }).then(function(response){ 
+        getTodos();
+    }).catch(function(error){
+        console.log('ERROR in ajax PUT:', error);
+    });
+    
 }
 
-// changes background color of given
-function changeColor() {
-    console.log('in change color', $(this));
-    if ($(this).children().hasClass("active") === true) {
-            $(this).children().removeClass("active");
-    }
-    else {
-        $(this).children().addClass("active");
-    }
-}
+
+
+
+// if(array[i].completed_status === true){
+//             $('#listTable').append(`
+//                 <tr data-id=${array[i].id}>
+//                     <td class="strikeThrough taskName completed">
+//                         <span class="checkMark"><i class="fas fa-check checkMark"></i></span>
+//                         ${array[i].task}
+//                     </td>
+//                     <td class="completed">Task Completed!</td>
+//                     <td class="completed"><button class="delete btn btn-danger">Remove</button></td>
+//                 </tr>
+//             `)            
+//         } else {
+//             $('#listTable').append(`
+//             <tr data-id=${array[i].id}>
+//                 <td class="taskName">${array[i].task}</td>
+//                 <td><button class="complete btn btn-success">Complete Task</button></td>
+//                 <td><button class="delete btn btn-danger">Remove</button></td>
+//             </tr>
+//         `)  
+//         }
